@@ -58,14 +58,16 @@ exports.login = async (req, res) => {
   const token = generateToken(user._id);
 
   res
-    .cookie("token", token, {
-      httpOnly: true,
-      sameSite: "lax",
-    })
-    .json({
-      success: true,
-      data: user,
-    });
+  .cookie("token", token, {
+    httpOnly: true,
+    secure: true,       
+    sameSite: "none",  
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  })
+  .json({
+    success: true,
+    data: user,
+  });
 };
 
 exports.logout = async (req, res) => {
