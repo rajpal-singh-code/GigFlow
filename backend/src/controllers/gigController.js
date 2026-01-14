@@ -5,20 +5,34 @@ const Gig = require("../models/Gig");
  */
 exports.createGig = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    const { title, description, budget } = req.body;
+
+    if (!title || !description || !budget) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const gig = await Gig.create({
-      title: req.body.title,
-      description: req.body.description,
-      budget: req.body.budget,
+      title,
+      description,
+      budget,
       ownerId: req.user._id,
-      status: "open", // ensures visibility
+      status: "open",
     });
 
-    res.status(201).json(gig);
+    res.status(201).json({
+      success: true,
+      data: gig,
+    });
   } catch (err) {
-    console.error("Create gig error:", err);
+    console.error("Create gig error:", err.message);
     res.status(500).json({ message: "Failed to create gig" });
   }
 };
+
 
 /**
  * Get all public gigs (Home / Dashboard)
