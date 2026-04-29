@@ -7,7 +7,7 @@ const {
   getGigById,
 } = require("../controllers/gigController");
 
-// 🌍 Public - all users can see
+// 🌍 Public - all users can see and use
 router.get("/", getGigs);
 
 // 👤 Private - only logged-in user
